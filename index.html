@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Coursetro Instructor</title>
+
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script src="./node_modules/web3/dist/web3.min.js"></script>
+
+    <style>
+        #loader {
+            width: 100px;
+            display: none;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Coursetro Instructor</h1>
+
+        <h2 id="instructor"></h2>
+
+        <div id="loader" class="spinner"></div>
+
+        <label for="name" class="col-lg-2 control-label">Instructor Name</label>
+        <input id="name" type="text">
+
+        <label for="age" class="col-lg-2 control-label">Instructor Age</label>
+        <input id="age" type="text">
+
+        <button id="button">Update Instructor</button>
+    </div>
+
+    <script>
+        let web3;
+        let coursetro;
+
+        const abi = [
+            {
+                "inputs": [
+                    { "internalType": "string", "name": "_fName", "type": "string" },
+                    { "internalType": "uint256", "name": "_age", "type": "uint256" }
+                ],
+                "name": "setInstructor",
+                "outputs": [],
+                "stateMutability": "nonpayable",
+                "type": "function"
+            },
+            {
+                "inputs": [],
+                "name": "getInstructor",
+                "outputs": [
+                    { "internalType": "string", "name": "", "type": "string" },
+                    { "internalType": "uint256", "name": "", "type": "uint256" }
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ];
+
+        const contractAddress = "0x5FbDB2315678afecb367f032d93F642f64180aa3";
+
+        function showLoader(show) {
+            document.getElementById("loader").style.display = show ? "block" : "none";
+        }
+
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        async function loadInstructor() {
+            const result = await coursetro.methods.getInstructor().call();
+            document.getElementById("instructor").innerText =
+                `${result[0]} (${result[1]} years old)`;
+        }
+
+        async function init() {
+            try {
+                if (window.ethereum) {
+                    web3 = new Web3(window.ethereum);
+                    await window.ethereum.request({ method: "eth_requestAccounts" });
+                } else {
+                    web3 = new Web3("http://127.0.0.1:8545");
+                }
+
+                coursetro = new web3.eth.Contract(abi, contractAddress);
+                await loadInstructor();
+            } catch (error) {
+                console.error("Init error:", error);
+            }
+        }
+
+        document.getElementById("button").addEventListener("click", async () => {
+            try {
+                const name = document.getElementById("name").value;
+                const age = document.getElementById("age").value;
+
+                showLoader(true);
+
+                await new Promise(requestAnimationFrame);
+                await sleep(500);
+
+                const accounts = await web3.eth.getAccounts();
+
+                await coursetro.methods.setInstructor(name, age).send({
+                    from: accounts[0],
+                    gas: 300000
+                });
+
+                await loadInstructor();
+            } catch (error) {
+                console.error("Error updating instructor:", error);
+            } finally {
+                showLoader(false);
+            }
+        });
+
+        init();
+    </script>
+
+</body>
+</html>

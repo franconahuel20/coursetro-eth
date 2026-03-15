@@ -1,0 +1,20 @@
+{
+  "name": "coursetro-eth",
+  "version": "1.0.0",
+  "description": "",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "web3": "^4.16.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.15",
+    "hardhat": "^3.1.12",
+    "typescript": "~5.8.0"
+  }
+}

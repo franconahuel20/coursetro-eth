@@ -1,0 +1,49 @@
+body {
+    background-color: #F0F0F0;
+    padding: 2em;
+    font-family: 'Raleway', 'Source Sans Pro', 'Arial';
+}
+
+.container {
+    width: 50%;
+    margin: 0 auto;
+}
+
+label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+input {
+    padding: 10px;
+    width: 50%;
+    margin-bottom: 1em;
+}
+
+button {
+    margin: 2em 0;
+    padding: 1em 4em;
+    display: block;
+}
+
+#instructor {
+    padding: 1em;
+    background-color: #fff;
+    margin: 1em 0;
+}
+
+#loader {
+    width: 60px;
+    height: 60px;
+    border: 6px solid #f3f3f3;
+    border-top: 6px solid #3498db;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    display: none;
+    margin: 20px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
